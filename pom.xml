@@ -8,15 +8,16 @@
     <parent>
         <groupId>com.reedelk</groupId>
         <artifactId>module-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
     </parent>
 
     <packaging>bundle</packaging>
-    <version>0.0.1</version>
+    <version>1.0.3-SNAPSHOT</version>
     <artifactId>module-kafka</artifactId>
 
     <properties>
-        <reedelk.version>1.0.1-SNAPSHOT</reedelk.version>
+        <reedelk.version>1.0.3-SNAPSHOT</reedelk.version>
+        <import.package.extra>com.reedelk.license</import.package.extra>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -49,84 +50,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.databind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-core</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-rest</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-json</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-rabbitmq</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-google-drive-v3</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-csv</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-database</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-xml</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-mail</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-mongodb</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-file</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-ftp</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.reedelk</groupId>
-            <artifactId>module-scheduler</artifactId>
-            <version>${reedelk.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
