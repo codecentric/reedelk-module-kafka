@@ -8,15 +8,15 @@
     <parent>
         <groupId>com.reedelk</groupId>
         <artifactId>module-parent</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <packaging>bundle</packaging>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <artifactId>module-kafka</artifactId>
 
     <properties>
-        <reedelk.version>1.0.3</reedelk.version>
+        <reedelk.version>1.0.4-SNAPSHOT</reedelk.version>
         <import.package.extra>com.reedelk.license</import.package.extra>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
