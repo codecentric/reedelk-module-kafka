@@ -16,6 +16,7 @@
     <artifactId>module-kafka</artifactId>
 
     <properties>
+        <import.package.extra>com.reedelk.license</import.package.extra>
         <reedelk.version>1.0.4-SNAPSHOT</reedelk.version>
         <import.package.extra>com.reedelk.license</import.package.extra>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
