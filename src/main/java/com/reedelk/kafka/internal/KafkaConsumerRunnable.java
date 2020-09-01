@@ -1,7 +1,7 @@
 package com.reedelk.kafka.internal;
 
 import com.reedelk.kafka.component.KafkaConsumer;
-import com.reedelk.kafka.internal.attribute.KafkaTopicConsumerAttributes;
+import com.reedelk.kafka.internal.attribute.KafkaConsumerAttributes;
 import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.runtime.api.component.InboundEventListener;
 import com.reedelk.runtime.api.message.Message;
@@ -54,7 +54,7 @@ public class KafkaConsumerRunnable implements Runnable {
 
                     KafkaRecord kafkaRecord = new KafkaRecord(record.key(), record.value());
 
-                    KafkaTopicConsumerAttributes attributes = new KafkaTopicConsumerAttributes(record);
+                    KafkaConsumerAttributes attributes = new KafkaConsumerAttributes(record);
 
                     Message eventMessage = MessageBuilder.get(KafkaConsumer.class)
                             .withJavaObject(kafkaRecord)

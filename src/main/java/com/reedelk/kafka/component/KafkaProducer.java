@@ -1,6 +1,7 @@
 package com.reedelk.kafka.component;
 
 import com.reedelk.kafka.internal.KafkaProducerFactory;
+import com.reedelk.kafka.internal.attribute.KafkaProducerAttributes;
 import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.runtime.api.annotation.*;
 import com.reedelk.runtime.api.component.ProcessorSync;
@@ -40,10 +41,11 @@ public class KafkaProducer implements ProcessorSync {
 
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Message apply(FlowContext flowContext, Message message) {
         // Input is a map key and values
-        try (org.apache.kafka.clients.producer.KafkaProducer<String, String> producer =
+        try (org.apache.kafka.clients.producer.KafkaProducer<?, ?> producer =
                      KafkaProducerFactory.from(configuration)) {
 
             // TODO: We might also accept lists here
@@ -51,12 +53,15 @@ public class KafkaProducer implements ProcessorSync {
             String recordKey = record.get(KafkaRecord.KEY);
             String recordValue = record.get(KafkaRecord.VALUE);
 
-            Future<RecordMetadata> send = producer.send(new ProducerRecord<>(topic, recordKey, recordValue));
+            ProducerRecord producerRecord = new ProducerRecord<>(topic, recordKey, recordValue);
+            Future<RecordMetadata> send = producer.send(producerRecord);
             RecordMetadata recordMetadata = send.get();
 
             return MessageBuilder.get(KafkaProducer.class)
-                    .empty()
+                    .withJavaObject(message.payload())
+                    .attributes(new KafkaProducerAttributes(recordMetadata))
                     .build();
+
         } catch (InterruptedException | ExecutionException e) {
             throw new PlatformException(e);
         }

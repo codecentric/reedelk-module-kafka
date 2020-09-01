@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class KafkaProducerFactory {
 
-    public static KafkaProducer<String, String> from(KafkaProducerConfiguration configuration) {
+    public static KafkaProducer<?, ?> from(KafkaProducerConfiguration configuration) {
         Properties kafkaProperties = new Properties();
 
         String bootstrapServers = Optional.ofNullable(configuration.getBootstrapServers()).orElse(Defaults.BOOTSTRAP_SERVERS);
@@ -26,7 +26,8 @@ public class KafkaProducerFactory {
         // Uses the wrong class
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(null);
-        KafkaProducer<String, String> producer =
+        // TODO: Serializer
+        KafkaProducer<?, ?> producer =
                 new KafkaProducer<>(kafkaProperties, new StringSerializer(), new StringSerializer());
         Thread.currentThread().setContextClassLoader(contextClassLoader);
         return producer;
