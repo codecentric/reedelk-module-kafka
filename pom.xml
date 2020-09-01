@@ -46,11 +46,13 @@
             <groupId>com.reedelk</groupId>
             <artifactId>module-core</artifactId>
             <version>${reedelk.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.reedelk</groupId>
             <artifactId>module-rest</artifactId>
             <version>${reedelk.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
