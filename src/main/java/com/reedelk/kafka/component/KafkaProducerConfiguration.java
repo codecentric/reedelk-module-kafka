@@ -30,13 +30,13 @@ public class KafkaProducerConfiguration implements Implementor {
     @Property("Key Serializer")
     @InitValue("STRING")
     @DefaultValue("STRING")
-    @Description("The deserializer type to be used for the Kafka record key")
+    @Description("The serializer type to be used for the Kafka record key")
     private KafkaSerializer keySerializer;
 
     @Property("Value Serializer")
     @InitValue("STRING")
     @DefaultValue("STRING")
-    @Description("The deserializer type to be used for the Kafka record value")
+    @Description("The serializer type to be used for the Kafka record value")
     private KafkaSerializer valueSerializer;
 
 

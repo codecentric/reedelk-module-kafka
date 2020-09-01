@@ -1,16 +1,16 @@
 package com.reedelk.kafka.internal;
 
 import com.reedelk.kafka.component.KafkaConsumerConfiguration;
+import com.reedelk.kafka.component.KafkaDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.Optional;
 import java.util.Properties;
 
 public class KafkaConsumerFactory {
 
-    public static KafkaConsumer<String,String> from(KafkaConsumerConfiguration configuration) {
+    public static KafkaConsumer<?, ?> from(KafkaConsumerConfiguration configuration) {
         Properties kafkaProperties = new Properties();
 
         String bootstrapServers = Optional.ofNullable(configuration.getBootstrapServers()).orElse(Defaults.BOOTSTRAP_SERVERS);
@@ -25,10 +25,15 @@ public class KafkaConsumerFactory {
         int autoCommitInterval = Optional.ofNullable(configuration.getAutoCommitInterval()).orElse(Defaults.AUTO_COMMIT_INTERVAL);
         kafkaProperties.setProperty(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, String.valueOf(autoCommitInterval));
 
-        // Uses the wrong class
+        KafkaDeserializer keyDeserializer = configuration.getKeyDeserializer();
+        KafkaDeserializer valueDeserializer = configuration.getValueDeserializer();
+
+        // We must temporarily use a different classloader otherwise the serializer
+        // classes will belong to a different classloader and it won't be possible
+        // to create the kafka consumer.
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(null);
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaProperties, new StringDeserializer(), new StringDeserializer());
+        KafkaConsumer<?, ?> consumer = new KafkaConsumer<>(kafkaProperties, keyDeserializer.create(), valueDeserializer.create());
         Thread.currentThread().setContextClassLoader(contextClassLoader);
         return consumer;
     }

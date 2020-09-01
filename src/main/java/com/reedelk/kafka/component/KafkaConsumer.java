@@ -44,7 +44,7 @@ public class KafkaConsumer extends AbstractInbound {
         requireNotNull(KafkaConsumer.class, topics, "Topics must be defined");
         requireTrue(KafkaConsumer.class, !topics.isEmpty(), "At least one topic must be defined");
 
-        org.apache.kafka.clients.consumer.KafkaConsumer<String, String> consumer =
+        org.apache.kafka.clients.consumer.KafkaConsumer<?, ?> consumer =
                 KafkaConsumerFactory.from(configuration);
 
         kafkaConsumerRunnable = new KafkaConsumerRunnable(this, consumer, topics, pollTimeout);

@@ -4,6 +4,8 @@
   "implementor": "com.reedelk.kafka.component.KafkaConsumerConfiguration",
   "bootstrapServers": "localhost:9092",
   "groupId": "test",
+  "keyDeserializer": "STRING",
+  "valueDeserializer": "STRING",
   "enableAutoCommit": true,
   "autoCommitInterval": 1000
 }

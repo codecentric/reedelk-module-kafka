@@ -28,6 +28,18 @@ public class KafkaConsumerConfiguration implements Implementor {
     @Description("A unique string that identifies the consumer group this consumer belongs to. This property is required if the consumer uses either the group management functionality by using <code>subscribe(topic)</code> or the Kafka-based offset management strategy.")
     private String groupId;
 
+    @Property("Key Deserializer")
+    @InitValue("STRING")
+    @DefaultValue("STRING")
+    @Description("The deserializer type to be used for the Kafka record key")
+    private KafkaDeserializer keyDeserializer;
+
+    @Property("Value Deserializer")
+    @InitValue("STRING")
+    @DefaultValue("STRING")
+    @Description("The deserializer type to be used for the Kafka record value")
+    private KafkaDeserializer valueDeserializer;
+
     @Property("Enable Auto Commit")
     @Example("false")
     @DefaultValue("false")
@@ -73,5 +85,21 @@ public class KafkaConsumerConfiguration implements Implementor {
 
     public void setAutoCommitInterval(Integer autoCommitInterval) {
         this.autoCommitInterval = autoCommitInterval;
+    }
+
+    public KafkaDeserializer getKeyDeserializer() {
+        return keyDeserializer;
+    }
+
+    public void setKeyDeserializer(KafkaDeserializer keyDeserializer) {
+        this.keyDeserializer = keyDeserializer;
+    }
+
+    public KafkaDeserializer getValueDeserializer() {
+        return valueDeserializer;
+    }
+
+    public void setValueDeserializer(KafkaDeserializer valueDeserializer) {
+        this.valueDeserializer = valueDeserializer;
     }
 }
