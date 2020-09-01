@@ -23,19 +23,13 @@
       "implementor": "com.reedelk.core.component.PayloadSet",
       "description": "Payload Set description",
       "mimeType": "application/java",
-      "payload": "#[[ key: 'myId', value: 'My value']]"
+      "payload": "#[[ key: 'myId123', value: 'My value']]"
     },
     {
       "implementor": "com.reedelk.kafka.component.KafkaProducer",
       "description": "KafkaTopicProducer description",
       "configuration": {"ref": "0473b43d-bc70-4d55-86e8-66c765ee342f"},
       "topic": "orders"
-    },
-    {
-      "implementor": "com.reedelk.rest.component.RESTClient",
-      "description": "REST Client description",
-      "baseURL": "https://run.mocky.io/v3/9398b0ce-89d9-4d3a-a922-5ca016ded643",
-      "method": "GET"
     }
   ]
 }
