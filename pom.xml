@@ -16,6 +16,7 @@
     <artifactId>module-kafka</artifactId>
 
     <properties>
+        <reedelk.version>1.0.4</reedelk.version>
         <import.package.extra>com.reedelk.license</import.package.extra>
         <import.package.extra>com.reedelk.license</import.package.extra>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,6 +42,16 @@
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.reedelk</groupId>
+            <artifactId>module-core</artifactId>
+            <version>${reedelk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.reedelk</groupId>
+            <artifactId>module-rest</artifactId>
+            <version>${reedelk.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>

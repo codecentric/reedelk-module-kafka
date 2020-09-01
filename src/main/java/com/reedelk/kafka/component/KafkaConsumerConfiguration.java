@@ -7,8 +7,8 @@ import org.osgi.service.component.annotations.Component;
 import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 
 @Shared
-@Component(service = ConnectionConfiguration.class, scope = PROTOTYPE)
-public class ConnectionConfiguration implements Implementor {
+@Component(service = KafkaConsumerConfiguration.class, scope = PROTOTYPE)
+public class KafkaConsumerConfiguration implements Implementor {
 
     @Property("Bootstrap Servers")
     @Hint("localhost:9092")

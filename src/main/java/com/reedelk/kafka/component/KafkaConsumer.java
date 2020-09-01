@@ -4,7 +4,6 @@ import com.reedelk.kafka.internal.KafkaConsumerFactory;
 import com.reedelk.kafka.internal.attribute.KafkaTopicConsumerAttributes;
 import com.reedelk.runtime.api.annotation.*;
 import com.reedelk.runtime.api.component.AbstractInbound;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.osgi.service.component.annotations.Component;
 
 import java.util.List;
@@ -15,12 +14,12 @@ import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 @ModuleComponent("Kafka Topic Consumer")
 @ComponentOutput(attributes = KafkaTopicConsumerAttributes.class, payload = String.class, description = "KafkaConsumer Output description")
 @Description("Kafka Topic Consumer")
-@Component(service = KafkaTopicConsumer.class, scope = PROTOTYPE)
-public class KafkaTopicConsumer extends AbstractInbound {
+@Component(service = KafkaConsumer.class, scope = PROTOTYPE)
+public class KafkaConsumer extends AbstractInbound {
 
-    @DialogTitle("Kafka Connection Factory")
+    @DialogTitle("Kafka Consumer Configuration")
     @Property("Connection")
-    private ConnectionConfiguration connection;
+    private KafkaConsumerConfiguration configuration;
 
     @TabGroup("Topics")
     @Property("Consumer Subscription Topics")
@@ -40,11 +39,12 @@ public class KafkaTopicConsumer extends AbstractInbound {
 
     @Override
     public void onStart() {
-        requireNotNull(KafkaTopicConsumer.class, connection, "Kafka Connection must be defined");
-        requireNotNull(KafkaTopicConsumer.class, topics, "Topics must be defined");
-        requireTrue(KafkaTopicConsumer.class, !topics.isEmpty(), "At least one topic must be defined");
+        requireNotNull(KafkaConsumer.class, configuration, "Kafka Connection must be defined");
+        requireNotNull(KafkaConsumer.class, topics, "Topics must be defined");
+        requireTrue(KafkaConsumer.class, !topics.isEmpty(), "At least one topic must be defined");
 
-        KafkaConsumer<String, String> consumer = KafkaConsumerFactory.from(connection);
+        org.apache.kafka.clients.consumer.KafkaConsumer<String, String> consumer =
+                KafkaConsumerFactory.from(configuration);
 
         kafkaRunnable = new KafkaRunnable(this, consumer, topics, pollTimeout);
         kafkaThread = new Thread(kafkaRunnable);
@@ -63,8 +63,8 @@ public class KafkaTopicConsumer extends AbstractInbound {
         }
     }
 
-    public void setConnection(ConnectionConfiguration connection) {
-        this.connection = connection;
+    public void setConfiguration(KafkaConsumerConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     public void setTopics(List<String> topics) {

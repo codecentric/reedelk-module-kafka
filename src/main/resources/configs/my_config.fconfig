@@ -1,0 +1,13 @@
+{
+  "id": "a0d78100-0338-46d9-a2ec-0d97ece07ee2",
+  "title": "My configuration",
+  "implementor": "com.reedelk.rest.component.RESTListenerConfiguration",
+  "protocol": "HTTP",
+  "host": "localhost",
+  "port": 8080,
+  "keepAlive": true,
+  "openApi": {"info": {
+    "title": "My API",
+    "version": "v1"
+  }}
+}

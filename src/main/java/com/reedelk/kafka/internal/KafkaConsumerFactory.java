@@ -1,6 +1,6 @@
 package com.reedelk.kafka.internal;
 
-import com.reedelk.kafka.component.ConnectionConfiguration;
+import com.reedelk.kafka.component.KafkaConsumerConfiguration;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class KafkaConsumerFactory {
 
-    public static KafkaConsumer<String,String> from(ConnectionConfiguration configuration) {
+    public static KafkaConsumer<String,String> from(KafkaConsumerConfiguration configuration) {
         Properties kafkaProperties = new Properties();
 
         String bootstrapServers = Optional.ofNullable(configuration.getBootstrapServers()).orElse(Defaults.BOOTSTRAP_SERVERS);

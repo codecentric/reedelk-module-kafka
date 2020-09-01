@@ -7,7 +7,6 @@ import com.reedelk.runtime.api.message.MessageBuilder;
 import com.reedelk.runtime.api.message.content.MimeType;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,13 +14,13 @@ import java.util.Optional;
 
 public class KafkaRunnable implements Runnable {
 
-    private final KafkaConsumer<String, String> consumer;
+    private final org.apache.kafka.clients.consumer.KafkaConsumer consumer;
     private final InboundEventListener eventListener;
     private final List<String> topics;
     private volatile boolean running = true;
     private final int pollTimeout;
 
-    KafkaRunnable(InboundEventListener eventListener, KafkaConsumer<String, String> consumer, List<String> topics, Integer pollTimeout) {
+    KafkaRunnable(InboundEventListener eventListener, org.apache.kafka.clients.consumer.KafkaConsumer consumer, List<String> topics, Integer pollTimeout) {
         this.eventListener = eventListener;
         this.consumer = consumer;
         this.topics = topics;
@@ -55,7 +54,7 @@ public class KafkaRunnable implements Runnable {
 
                     KafkaTopicConsumerAttributes attributes = new KafkaTopicConsumerAttributes(record);
 
-                    Message eventMessage = MessageBuilder.get(KafkaTopicConsumer.class)
+                    Message eventMessage = MessageBuilder.get(KafkaConsumer.class)
                             .withString(value, MimeType.TEXT_PLAIN)
                             .attributes(attributes)
                             .build();
