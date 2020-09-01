@@ -1,6 +1,7 @@
 package com.reedelk.kafka.internal;
 
 import com.reedelk.kafka.component.KafkaProducerConfiguration;
+import com.reedelk.kafka.component.KafkaSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -23,12 +24,17 @@ public class KafkaProducerFactory {
         kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        // Uses the wrong class
+        KafkaSerializer keySerializer = Optional.ofNullable(configuration.getKeySerializer()).orElse(KafkaSerializer.STRING);
+        KafkaSerializer valueSerializer = Optional.ofNullable(configuration.getValueSerializer()).orElse(KafkaSerializer.STRING);
+
+        // We must temporarily use a different classloader otherwise the serializer
+        // classes will belong to a different classloader and it won't be possible
+        // to create the kafka producer.
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(null);
-        // TODO: Serializer
+
         KafkaProducer<?, ?> producer =
-                new KafkaProducer<>(kafkaProperties, new StringSerializer(), new StringSerializer());
+                new KafkaProducer<>(kafkaProperties, keySerializer.create(), valueSerializer.create());
         Thread.currentThread().setContextClassLoader(contextClassLoader);
         return producer;
     }

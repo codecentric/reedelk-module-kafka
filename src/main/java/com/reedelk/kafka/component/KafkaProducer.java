@@ -36,11 +36,6 @@ public class KafkaProducer implements ProcessorSync {
     @Description("List of topics to subscribe for")
     private String topic;
 
-    @Override
-    public void initialize() {
-
-    }
-
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Message apply(FlowContext flowContext, Message message) {
@@ -62,14 +57,9 @@ public class KafkaProducer implements ProcessorSync {
                     .attributes(new KafkaProducerAttributes(recordMetadata))
                     .build();
 
-        } catch (InterruptedException | ExecutionException e) {
-            throw new PlatformException(e);
+        } catch (InterruptedException | ExecutionException exception) {
+            throw new PlatformException(exception);
         }
-    }
-
-    @Override
-    public void dispose() {
-        // dispose logic
     }
 
     public KafkaProducerConfiguration getConfiguration() {

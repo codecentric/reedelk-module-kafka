@@ -27,6 +27,18 @@ public class KafkaProducerConfiguration implements Implementor {
     @Description("An id string to pass to the server when making requests. The purpose of this is to be able to track the source of requests beyond just ip/port by allowing a logical application name to be included in server-side request logging.")
     private String clientId;
 
+    @Property("Key Serializer")
+    @InitValue("STRING")
+    @DefaultValue("STRING")
+    @Description("The deserializer type to be used for the Kafka record key")
+    private KafkaSerializer keySerializer;
+
+    @Property("Value Serializer")
+    @InitValue("STRING")
+    @DefaultValue("STRING")
+    @Description("The deserializer type to be used for the Kafka record value")
+    private KafkaSerializer valueSerializer;
+
 
     public String getBootstrapServers() {
         return bootstrapServers;
@@ -43,5 +55,21 @@ public class KafkaProducerConfiguration implements Implementor {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public KafkaSerializer getKeySerializer() {
+        return keySerializer;
+    }
+
+    public void setKeySerializer(KafkaSerializer keySerializer) {
+        this.keySerializer = keySerializer;
+    }
+
+    public KafkaSerializer getValueSerializer() {
+        return valueSerializer;
+    }
+
+    public void setValueSerializer(KafkaSerializer valueSerializer) {
+        this.valueSerializer = valueSerializer;
     }
 }
