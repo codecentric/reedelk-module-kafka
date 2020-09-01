@@ -12,7 +12,7 @@ import java.util.List;
 import static com.reedelk.runtime.api.commons.ComponentPrecondition.Configuration.*;
 import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 
-@ModuleComponent("Kafka Topic Consumer")
+@ModuleComponent("Kafka Consumer")
 @ComponentOutput(attributes = KafkaConsumerAttributes.class, payload = String.class, description = "KafkaConsumer Output description")
 @Description("Kafka Topic Consumer")
 @Component(service = KafkaConsumer.class, scope = PROTOTYPE)

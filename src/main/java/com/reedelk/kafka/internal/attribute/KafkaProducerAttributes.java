@@ -5,6 +5,8 @@ import com.reedelk.runtime.api.annotation.TypeProperty;
 import com.reedelk.runtime.api.message.MessageAttributes;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+import java.util.List;
+
 import static com.reedelk.kafka.internal.attribute.KafkaConsumerAttributes.*;
 
 @Type
@@ -21,5 +23,9 @@ public class KafkaProducerAttributes extends MessageAttributes {
         put(TOPIC, metadata.topic());
         put(PARTITION, metadata.partition());
         put(TIMESTAMP, metadata.timestamp());
+    }
+
+    public KafkaProducerAttributes(List<RecordMetadata> metadatas) {
+        // TODO: Complete me
     }
 }
