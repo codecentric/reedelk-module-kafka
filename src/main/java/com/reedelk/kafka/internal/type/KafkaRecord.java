@@ -1,10 +1,8 @@
 package com.reedelk.kafka.internal.type;
 
 import com.reedelk.runtime.api.annotation.Type;
-import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @Type(mapKeyType = String.class, mapValueType = Object.class)
 public class KafkaRecord extends HashMap<String, Object> {
