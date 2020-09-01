@@ -1,6 +1,7 @@
 package com.reedelk.kafka.component;
 
 import com.reedelk.kafka.internal.KafkaProducerFactory;
+import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.runtime.api.annotation.*;
 import com.reedelk.runtime.api.component.ProcessorSync;
 import com.reedelk.runtime.api.exception.PlatformException;
@@ -45,11 +46,13 @@ public class KafkaProducer implements ProcessorSync {
         try (org.apache.kafka.clients.producer.KafkaProducer<String, String> producer =
                      KafkaProducerFactory.from(configuration)) {
 
+            // TODO: We might also accept lists here
             Map<String, String> record = message.payload();
-            String recordKey = record.get("id");
-            String recordValue = record.get("value");
+            String recordKey = record.get(KafkaRecord.KEY);
+            String recordValue = record.get(KafkaRecord.VALUE);
+
             Future<RecordMetadata> send = producer.send(new ProducerRecord<>(topic, recordKey, recordValue));
-            send.get();
+            RecordMetadata recordMetadata = send.get();
 
             return MessageBuilder.get(KafkaProducer.class)
                     .empty()
