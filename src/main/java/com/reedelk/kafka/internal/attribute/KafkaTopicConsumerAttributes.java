@@ -4,7 +4,6 @@ import com.reedelk.runtime.api.annotation.Type;
 import com.reedelk.runtime.api.annotation.TypeProperty;
 import com.reedelk.runtime.api.message.MessageAttributes;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.common.protocol.types.Field;
 
 import static com.reedelk.kafka.internal.attribute.KafkaTopicConsumerAttributes.*;
 
@@ -22,8 +21,7 @@ public class KafkaTopicConsumerAttributes extends MessageAttributes {
     static final String PARTITION = "envelope";
     static final String TIMESTAMP = "timestamp";
 
-    public KafkaTopicConsumerAttributes(ConsumerRecord<String, String> record) {
-        put(KEY, record.key());
+    public KafkaTopicConsumerAttributes(ConsumerRecord<?, ?> record) {
         put(TOPIC, record.topic());
         put(OFFSET, record.offset());
         put(TIMESTAMP, record.timestamp());

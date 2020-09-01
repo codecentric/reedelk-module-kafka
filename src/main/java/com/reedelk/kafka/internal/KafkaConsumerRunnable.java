@@ -1,10 +1,11 @@
-package com.reedelk.kafka.component;
+package com.reedelk.kafka.internal;
 
+import com.reedelk.kafka.component.KafkaConsumer;
 import com.reedelk.kafka.internal.attribute.KafkaTopicConsumerAttributes;
+import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.runtime.api.component.InboundEventListener;
 import com.reedelk.runtime.api.message.Message;
 import com.reedelk.runtime.api.message.MessageBuilder;
-import com.reedelk.runtime.api.message.content.MimeType;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 
@@ -12,15 +13,15 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-public class KafkaRunnable implements Runnable {
+public class KafkaConsumerRunnable implements Runnable {
 
-    private final org.apache.kafka.clients.consumer.KafkaConsumer consumer;
+    private final org.apache.kafka.clients.consumer.KafkaConsumer<?,?> consumer;
     private final InboundEventListener eventListener;
     private final List<String> topics;
     private volatile boolean running = true;
     private final int pollTimeout;
 
-    KafkaRunnable(InboundEventListener eventListener, org.apache.kafka.clients.consumer.KafkaConsumer consumer, List<String> topics, Integer pollTimeout) {
+    public KafkaConsumerRunnable(InboundEventListener eventListener, org.apache.kafka.clients.consumer.KafkaConsumer<?,?> consumer, List<String> topics, Integer pollTimeout) {
         this.eventListener = eventListener;
         this.consumer = consumer;
         this.topics = topics;
@@ -46,22 +47,23 @@ public class KafkaRunnable implements Runnable {
         while (running) {
 
             try {
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(pollTimeout));
 
-                for (ConsumerRecord<String, String> record : records) {
+                ConsumerRecords<?, ?> records = consumer.poll(Duration.ofMillis(pollTimeout));
 
-                    String value = record.value();
+                for (ConsumerRecord<?, ?> record : records) {
+
+                    KafkaRecord kafkaRecord = new KafkaRecord(record.key(), record.value());
 
                     KafkaTopicConsumerAttributes attributes = new KafkaTopicConsumerAttributes(record);
 
                     Message eventMessage = MessageBuilder.get(KafkaConsumer.class)
-                            .withString(value, MimeType.TEXT_PLAIN)
+                            .withJavaObject(kafkaRecord)
                             .attributes(attributes)
                             .build();
 
                     eventListener.onEvent(eventMessage);
                 }
-            } catch (Exception e) {
+            } catch (Exception exception) {
                 running = false;
             }
         }

@@ -1,6 +1,7 @@
 package com.reedelk.kafka.component;
 
 import com.reedelk.kafka.internal.KafkaConsumerFactory;
+import com.reedelk.kafka.internal.KafkaConsumerRunnable;
 import com.reedelk.kafka.internal.attribute.KafkaTopicConsumerAttributes;
 import com.reedelk.runtime.api.annotation.*;
 import com.reedelk.runtime.api.component.AbstractInbound;
@@ -34,7 +35,7 @@ public class KafkaConsumer extends AbstractInbound {
     @Description("The maximum time to block before the next poll in milliseconds")
     private Integer pollTimeout;
 
-    private KafkaRunnable kafkaRunnable;
+    private KafkaConsumerRunnable kafkaConsumerRunnable;
     private Thread kafkaThread;
 
     @Override
@@ -46,15 +47,15 @@ public class KafkaConsumer extends AbstractInbound {
         org.apache.kafka.clients.consumer.KafkaConsumer<String, String> consumer =
                 KafkaConsumerFactory.from(configuration);
 
-        kafkaRunnable = new KafkaRunnable(this, consumer, topics, pollTimeout);
-        kafkaThread = new Thread(kafkaRunnable);
+        kafkaConsumerRunnable = new KafkaConsumerRunnable(this, consumer, topics, pollTimeout);
+        kafkaThread = new Thread(kafkaConsumerRunnable);
         kafkaThread.start();
     }
 
     @Override
     public void onShutdown() {
         if (kafkaThread != null) {
-            kafkaRunnable.terminate();
+            kafkaConsumerRunnable.terminate();
             try {
                 kafkaThread.join();
             } catch (InterruptedException e) {
