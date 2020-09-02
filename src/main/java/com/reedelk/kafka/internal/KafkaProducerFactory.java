@@ -4,7 +4,6 @@ import com.reedelk.kafka.component.KafkaProducerConfiguration;
 import com.reedelk.kafka.component.KafkaSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Optional;
 import java.util.Properties;
@@ -19,10 +18,6 @@ public class KafkaProducerFactory {
 
         String clientId = Optional.ofNullable(configuration.getClientId()).orElse(Defaults.CLIENT_ID);
         kafkaProperties.put(ProducerConfig.CLIENT_ID_CONFIG, clientId);
-
-
-        kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
         KafkaSerializer keySerializer = Optional.ofNullable(configuration.getKeySerializer()).orElse(KafkaSerializer.STRING);
         KafkaSerializer valueSerializer = Optional.ofNullable(configuration.getValueSerializer()).orElse(KafkaSerializer.STRING);

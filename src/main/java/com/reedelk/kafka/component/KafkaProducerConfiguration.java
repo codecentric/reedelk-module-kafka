@@ -11,32 +11,38 @@ import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 public class KafkaProducerConfiguration implements Implementor {
 
     @Property("Bootstrap Servers")
-    @Hint("localhost:9092")
+    @Hint("localhost:9092,localhost:9096")
     @Example("localhost:9092")
     @DefaultValue("localhost:9092")
     @InitValue("localhost:9092")
-    @Description("\"A list of host/port pairs to use for establishing the initial connection to the Kafka cluster. The client will make use of all servers irrespective of which servers are specified here for bootstrapping&mdash;this list only impacts the initial hosts used to discover the full set of servers. This list should be in the form \"\n" +
-            "                                                       + \"<code>host1:port1,host2:port2,...</code>. Since these servers are just used for the initial connection to \"\n" +
-            "                                                       + \"discover the full cluster membership (which may change dynamically), this list need not contain the full set of \"\n" +
-            "                                                       + \"servers (you may want more than one, though, in case a server is down).\"")
+    @Description("A list of host/port pairs to use for establishing the initial connection to the Kafka cluster. " +
+            "The client will make use of all servers irrespective of which servers are specified here for bootstrapping&mdash;this list only impacts the initial hosts used to discover the full set of servers. This list should be in the form "
+            + "<code>host1:port1,host2:port2,...</code>. Since these servers are just used for the initial connection to "
+            + "discover the full cluster membership (which may change dynamically), this list need not contain the full set of "
+            + "servers (you may want more than one, though, in case a server is down).")
     private String bootstrapServers;
 
     @Property("Client Id")
-    @Hint("client1")
-    @Example("client1")
-    @Description("An id string to pass to the server when making requests. The purpose of this is to be able to track the source of requests beyond just ip/port by allowing a logical application name to be included in server-side request logging.")
+    @Hint("client01")
+    @Example("client01")
+    @DefaultValue("client01")
+    @Description("An id string to pass to the server when making requests. " +
+            "The purpose of this is to be able to track the source of requests beyond just ip/port by " +
+            "allowing a logical application name to be included in server-side request logging.")
     private String clientId;
 
     @Property("Key Serializer")
     @InitValue("STRING")
+    @Example("FLOAT")
     @DefaultValue("STRING")
-    @Description("The serializer type to be used for the Kafka record key")
+    @Description("The serializer type to be used for the Kafka record key.")
     private KafkaSerializer keySerializer;
 
     @Property("Value Serializer")
     @InitValue("STRING")
+    @Example("FLOAT")
     @DefaultValue("STRING")
-    @Description("The serializer type to be used for the Kafka record value")
+    @Description("The serializer type to be used for the Kafka record value.")
     private KafkaSerializer valueSerializer;
 
 

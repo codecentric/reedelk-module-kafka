@@ -13,6 +13,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
+import static com.reedelk.kafka.internal.commons.Default.POLL_TIMEOUT_MS;
+
 public class KafkaConsumerRunnable implements Runnable {
 
     private final org.apache.kafka.clients.consumer.KafkaConsumer<?,?> consumer;
@@ -25,7 +27,7 @@ public class KafkaConsumerRunnable implements Runnable {
         this.eventListener = eventListener;
         this.consumer = consumer;
         this.topics = topics;
-        this.pollTimeout = Optional.ofNullable(pollTimeout).orElse(100);
+        this.pollTimeout = Optional.ofNullable(pollTimeout).orElse(POLL_TIMEOUT_MS);
     }
 
     @Override
