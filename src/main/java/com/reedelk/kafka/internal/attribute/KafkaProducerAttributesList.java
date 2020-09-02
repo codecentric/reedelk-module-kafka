@@ -13,7 +13,7 @@ import static com.reedelk.kafka.internal.attribute.KafkaProducerAttributesList.*
 import static com.reedelk.kafka.internal.attribute.KafkaProducerAttributesList.METADATA;
 
 @Type
-@TypeProperty(name = METADATA, type = List.class)
+@TypeProperty(name = METADATA, type = KafkaProducerAttributes.class)
 @TypeProperty(name = SUCCESS, type = boolean.class)
 public class KafkaProducerAttributesList extends MessageAttributes {
 

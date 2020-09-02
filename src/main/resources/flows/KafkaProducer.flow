@@ -35,7 +35,7 @@
       "implementor": "com.reedelk.core.component.LoggerComponent",
       "description": "Logger description",
       "level": "INFO",
-      "message": "#[message.attributes().partition]"
+      "message": "#[message.attributes()]"
     }
   ]
 }
