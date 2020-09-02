@@ -1,8 +1,6 @@
 package com.reedelk.kafka.internal;
 
-import com.reedelk.core.component.LoggerComponent;
 import com.reedelk.kafka.component.KafkaProducer;
-import com.reedelk.kafka.internal.commons.Messages;
 import com.reedelk.kafka.internal.exception.KafkaProducerException;
 import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.runtime.api.commons.ComponentPrecondition;
