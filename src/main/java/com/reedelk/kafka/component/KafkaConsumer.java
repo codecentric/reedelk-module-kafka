@@ -28,8 +28,8 @@ public class KafkaConsumer extends AbstractInbound {
     private KafkaConsumerConfiguration configuration;
 
     @TabGroup("Topics")
-    @Property("Consumer Subscription Topics")
-    @Description("List of topics to subscribe for")
+    @Property("Subscription Topics")
+    @Description("List of topics the consumer will be subscribed to.")
     private List<String> topics;
 
     @Property("Poll timeout (ms)")
@@ -37,7 +37,7 @@ public class KafkaConsumer extends AbstractInbound {
     @DefaultValue("100")
     @Hint("100")
     @Example("500")
-    @Description("The maximum time to block before the next poll in milliseconds")
+    @Description("The maximum time to block before the next poll in milliseconds.")
     private Integer pollTimeout;
 
     private KafkaConsumerRunnable kafkaConsumerRunnable;

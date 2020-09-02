@@ -2,7 +2,6 @@ package com.reedelk.kafka.component;
 
 import com.reedelk.kafka.internal.KafkaProducerFactory;
 import com.reedelk.kafka.internal.KafkaProducerHandler;
-import com.reedelk.kafka.internal.KafkaRecordMetadata;
 import com.reedelk.kafka.internal.attribute.KafkaProducerAttributes;
 import com.reedelk.kafka.internal.attribute.KafkaProducerAttributesList;
 import com.reedelk.kafka.internal.exception.KafkaProducerException;
@@ -76,7 +75,7 @@ public class KafkaProducer implements ProcessorSync {
 
             // If map, we send a single record.
             if (payload instanceof Map) {
-                RecordMetadata recordMetadata = handler.handle(producer, (Map<Object, Object>) payload);
+                RecordMetadata recordMetadata = handler.send(producer, (Map<Object, Object>) payload);
                 return MessageBuilder.get(KafkaProducer.class)
                         .withJavaObject(payload)
                         .attributes(new KafkaProducerAttributes(recordMetadata))
@@ -84,10 +83,10 @@ public class KafkaProducer implements ProcessorSync {
 
             } else if (payload instanceof List) {
                 List<Object> recordsList = (List<Object>) payload;
-                List<KafkaRecordMetadata> recordMetadataList = handler.handle(producer, recordsList);
+                KafkaProducerHandler.RecordsSentResult result = handler.send(producer, recordsList);
                 return MessageBuilder.get(KafkaProducer.class)
-                        .withJavaObject(recordMetadataList)
-                        .attributes(new KafkaProducerAttributesList(recordMetadataList))
+                        .withJavaObject(payload)
+                        .attributes(new KafkaProducerAttributesList(result))
                         .build();
 
             } else {
