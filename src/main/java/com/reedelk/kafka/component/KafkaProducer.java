@@ -46,9 +46,11 @@ public class KafkaProducer implements ProcessorSync {
 
     @DialogTitle("Kafka Producer Configuration")
     @Property("Configuration")
+    @Mandatory
     private KafkaProducerConfiguration configuration;
 
     @Property("Topic")
+    @Mandatory
     @Example("payments")
     @Hint("payments")
     @Description("The topic the records sent by this producer will be appended to.")

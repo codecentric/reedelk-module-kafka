@@ -25,10 +25,12 @@ public class KafkaConsumer extends AbstractInbound {
 
     @DialogTitle("Kafka Consumer Configuration")
     @Property("Configuration")
+    @Mandatory
     private KafkaConsumerConfiguration configuration;
 
     @TabGroup("Topics")
     @Property("Subscription Topics")
+    @Mandatory
     @Description("List of topics the consumer will be subscribed to.")
     private List<String> topics;
 
