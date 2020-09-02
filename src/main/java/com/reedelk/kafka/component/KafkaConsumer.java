@@ -16,8 +16,10 @@ import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 @ModuleComponent("Kafka Consumer")
 @ComponentOutput(attributes = KafkaConsumerAttributes.class,
         payload = KafkaRecord.class,
-        description = "KafkaConsumer Output description")
-@Description("Kafka Topic Consumer")
+        description = "A map object containing a 'key' property and a 'value' property defining the received Kafka record.")
+@Description("Consumes messages from Kafka broker whenever an event is published on one of the given topics. " +
+        "A list of topics this consumer should listen to is mandatory for this component. " +
+        "The key deserializer and value deserializer must be consisten with the data this consumer will be listening to.")
 @Component(service = KafkaConsumer.class, scope = PROTOTYPE)
 public class KafkaConsumer extends AbstractInbound {
 
