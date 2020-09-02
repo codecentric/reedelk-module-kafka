@@ -24,7 +24,7 @@ import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 public class KafkaConsumer extends AbstractInbound {
 
     @DialogTitle("Kafka Consumer Configuration")
-    @Property("Connection")
+    @Property("Configuration")
     private KafkaConsumerConfiguration configuration;
 
     @TabGroup("Topics")

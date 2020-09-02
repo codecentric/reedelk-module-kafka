@@ -1,33 +1,26 @@
 package com.reedelk.kafka.component;
 
 import com.reedelk.kafka.internal.KafkaProducerFactory;
+import com.reedelk.kafka.internal.KafkaProducerHandler;
 import com.reedelk.kafka.internal.KafkaRecordMetadata;
 import com.reedelk.kafka.internal.attribute.KafkaProducerAttributes;
 import com.reedelk.kafka.internal.attribute.KafkaProducerAttributesList;
-import com.reedelk.kafka.internal.commons.Messages;
 import com.reedelk.kafka.internal.exception.KafkaProducerException;
 import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.kafka.internal.type.ListOfKafkaRecord;
 import com.reedelk.runtime.api.annotation.*;
-import com.reedelk.runtime.api.commons.ComponentPrecondition;
 import com.reedelk.runtime.api.commons.ComponentPrecondition.Input;
-import com.reedelk.runtime.api.commons.Preconditions;
 import com.reedelk.runtime.api.component.ProcessorSync;
 import com.reedelk.runtime.api.flow.FlowContext;
 import com.reedelk.runtime.api.message.Message;
-import com.reedelk.runtime.api.message.MessageAttributes;
 import com.reedelk.runtime.api.message.MessageBuilder;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.osgi.service.component.annotations.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
-import static com.reedelk.kafka.internal.commons.Messages.KafkaProducer.*;
+import static com.reedelk.kafka.internal.commons.Messages.KafkaProducer.UNEXPECTED_INPUT;
 import static com.reedelk.runtime.api.commons.ComponentPrecondition.Configuration.requireNotBlank;
 import static com.reedelk.runtime.api.commons.ComponentPrecondition.Configuration.requireNotNull;
 import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
@@ -53,11 +46,13 @@ import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 public class KafkaProducer implements ProcessorSync {
 
     @DialogTitle("Kafka Producer Configuration")
-    @Property("Producer Configuration")
+    @Property("Configuration")
     private KafkaProducerConfiguration configuration;
 
-    @Property("Producer Topic")
-    @Description("Producer topic")
+    @Property("Topic")
+    @Example("payments")
+    @Hint("payments")
+    @Description("The topic the records sent by this producer will be appended to.")
     private String topic;
 
     @Override
@@ -69,7 +64,7 @@ public class KafkaProducer implements ProcessorSync {
     @SuppressWarnings("unchecked")
     @Override
     public Message apply(FlowContext flowContext, Message message) {
-        // Input is a map key and values
+
         try (org.apache.kafka.clients.producer.KafkaProducer<?, ?> producer =
                      KafkaProducerFactory.from(configuration)) {
 
@@ -77,9 +72,11 @@ public class KafkaProducer implements ProcessorSync {
 
             Input.requireTypeMatchesAny(KafkaProducer.class, payload, List.class, Map.class);
 
+            KafkaProducerHandler handler = new KafkaProducerHandler(topic);
+
             // If map, we send a single record.
             if (payload instanceof Map) {
-                RecordMetadata recordMetadata = handleMap(producer, (Map<Object, Object>) payload);
+                RecordMetadata recordMetadata = handler.handle(producer, (Map<Object, Object>) payload);
                 return MessageBuilder.get(KafkaProducer.class)
                         .withJavaObject(payload)
                         .attributes(new KafkaProducerAttributes(recordMetadata))
@@ -87,7 +84,7 @@ public class KafkaProducer implements ProcessorSync {
 
             } else if (payload instanceof List) {
                 List<Object> recordsList = (List<Object>) payload;
-                List<KafkaRecordMetadata> recordMetadataList = handleList(producer, recordsList);
+                List<KafkaRecordMetadata> recordMetadataList = handler.handle(producer, recordsList);
                 return MessageBuilder.get(KafkaProducer.class)
                         .withJavaObject(recordMetadataList)
                         .attributes(new KafkaProducerAttributesList(recordMetadataList))
@@ -98,63 +95,6 @@ public class KafkaProducer implements ProcessorSync {
                 throw new KafkaProducerException(error);
             }
         }
-    }
-
-    @SuppressWarnings({"unchecked"})
-    private List<KafkaRecordMetadata> handleList(org.apache.kafka.clients.producer.KafkaProducer<?, ?> producer, List<Object> recordList) {
-        List<FutureRequest> futures = new ArrayList<>();
-        for (Object item : recordList) {
-            Input.requireTypeMatches(KafkaProducer.class, item, Map.class);
-
-            Map<Object, Object> kafkaRecord = (Map<Object, Object>) item;
-            Future<RecordMetadata> future = send(producer, kafkaRecord);
-            futures.add(new FutureRequest(future, kafkaRecord));
-        }
-
-        List<KafkaRecordMetadata> recordMetadataList = new ArrayList<>();
-        for (FutureRequest futureRequest : futures) {
-            try {
-                RecordMetadata recordMetadata = futureRequest.future.get();
-                recordMetadataList.add(new KafkaRecordMetadata(recordMetadata));
-            } catch (Exception exception) {
-                // The record could not be sent.
-                recordMetadataList.add(new KafkaRecordMetadata(futureRequest.record));
-            }
-        }
-        return recordMetadataList;
-    }
-
-    static class FutureRequest {
-
-        Future<RecordMetadata> future;
-        Map<Object, Object> record;
-
-        FutureRequest(Future<RecordMetadata> future, Map<Object,Object> record) {
-            this.future = future;
-            this.record = record;
-        }
-    }
-
-    private RecordMetadata handleMap(org.apache.kafka.clients.producer.KafkaProducer<?, ?> producer, Map<Object, Object> record)  {
-        Future<RecordMetadata> future = send(producer, record);
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException exception) {
-            String error = RECORD_SEND_ERROR.format(record, exception.getMessage());
-            throw new KafkaProducerException(error, exception);
-        }
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private Future<RecordMetadata> send(org.apache.kafka.clients.producer.KafkaProducer<?, ?> producer, Map<Object, Object> record) {
-        Preconditions.checkArgument(
-                record.containsKey(KafkaRecord.KEY) && record.containsKey(KafkaRecord.VALUE),
-                "Kafka input record is not valid. Please provide a map with 'key' and 'value' property.");
-
-        Object recordKey = record.get(KafkaRecord.KEY);
-        Object recordValue = record.get(KafkaRecord.VALUE);
-        ProducerRecord producerRecord = new ProducerRecord<>(topic, recordKey, recordValue);
-        return producer.send(producerRecord);
     }
 
     public KafkaProducerConfiguration getConfiguration() {
