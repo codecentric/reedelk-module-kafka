@@ -3,6 +3,7 @@ package com.reedelk.kafka.component;
 import com.reedelk.kafka.internal.KafkaConsumerFactory;
 import com.reedelk.kafka.internal.KafkaConsumerRunnable;
 import com.reedelk.kafka.internal.attribute.KafkaConsumerAttributes;
+import com.reedelk.kafka.internal.type.KafkaRecord;
 import com.reedelk.runtime.api.annotation.*;
 import com.reedelk.runtime.api.component.AbstractInbound;
 import org.osgi.service.component.annotations.Component;
@@ -13,7 +14,9 @@ import static com.reedelk.runtime.api.commons.ComponentPrecondition.Configuratio
 import static org.osgi.service.component.annotations.ServiceScope.PROTOTYPE;
 
 @ModuleComponent("Kafka Consumer")
-@ComponentOutput(attributes = KafkaConsumerAttributes.class, payload = String.class, description = "KafkaConsumer Output description")
+@ComponentOutput(attributes = KafkaConsumerAttributes.class,
+        payload = KafkaRecord.class,
+        description = "KafkaConsumer Output description")
 @Description("Kafka Topic Consumer")
 @Component(service = KafkaConsumer.class, scope = PROTOTYPE)
 public class KafkaConsumer extends AbstractInbound {
