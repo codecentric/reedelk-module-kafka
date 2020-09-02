@@ -30,12 +30,6 @@
       "description": "KafkaTopicProducer description",
       "configuration": {"ref": "0473b43d-bc70-4d55-86e8-66c765ee342f"},
       "topic": "orders"
-    },
-    {
-      "implementor": "com.reedelk.core.component.LoggerComponent",
-      "description": "Logger description",
-      "level": "INFO",
-      "message": "#[message]"
     }
   ]
 }
