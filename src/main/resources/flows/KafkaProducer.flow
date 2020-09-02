@@ -23,13 +23,19 @@
       "implementor": "com.reedelk.core.component.PayloadSet",
       "description": "Payload Set description",
       "mimeType": "application/java",
-      "payload": "#[[ key: 'myId123', value: 'My value']]"
+      "payload": "#[[ key: UUID.randomUUID(), value: 'My value']]"
     },
     {
       "implementor": "com.reedelk.kafka.component.KafkaProducer",
       "description": "KafkaTopicProducer description",
       "configuration": {"ref": "0473b43d-bc70-4d55-86e8-66c765ee342f"},
       "topic": "orders"
+    },
+    {
+      "implementor": "com.reedelk.core.component.LoggerComponent",
+      "description": "Logger description",
+      "level": "INFO",
+      "message": "#[message.attributes().partition]"
     }
   ]
 }

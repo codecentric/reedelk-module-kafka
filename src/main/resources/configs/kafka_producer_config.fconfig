@@ -4,5 +4,5 @@
   "implementor": "com.reedelk.kafka.component.KafkaProducerConfiguration",
   "bootstrapServers": "localhost:9092",
   "clientId": "client1",
-  "keySerializer": "STRING"
+  "keySerializer": "UUID"
 }

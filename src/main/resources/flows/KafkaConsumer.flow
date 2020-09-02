@@ -13,7 +13,7 @@
       "implementor": "com.reedelk.core.component.LoggerComponent",
       "description": "Logger description",
       "level": "INFO",
-      "message": "#['Received: ' + message.payload()]"
+      "message": "#['Received: ' + message.payload().key]"
     }
   ]
 }

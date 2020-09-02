@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.reedelk.kafka.internal.attribute.KafkaProducerAttributesList.*;
 import static com.reedelk.kafka.internal.attribute.KafkaProducerAttributesList.METADATA;
 
 @Type
 @TypeProperty(name = METADATA, type = List.class)
-@TypeProperty(name = METADATA, type = boolean.class)
+@TypeProperty(name = SUCCESS, type = boolean.class)
 public class KafkaProducerAttributesList extends MessageAttributes {
 
     static final String METADATA = "metadata";
