@@ -26,5 +26,3 @@ testdir/
 hostkey.ser
 *.h2.db
 *.factorypath
-# Maven
-target/
